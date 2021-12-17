@@ -6,8 +6,8 @@ if (isset($_FILES['file']['name'])) {
     $filename = $_FILES['file']['name'];
 
     /* Location */
-    $location = "../DOC/" . $filename;
-    $location_refer = "DOC/" . $filename;
+    $location = "../DOC/AVATAR/" . $filename;
+    $location_refer = "DOC/AVATAR/" . $filename;
     $imageFileType = pathinfo($location, PATHINFO_EXTENSION);
     $imageFileType = strtolower($imageFileType);
 

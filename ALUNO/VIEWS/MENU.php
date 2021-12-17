@@ -6,7 +6,7 @@
   <div class="sidebar-wrapper">
     <ul class="nav">
       <?php
-      $ICON = ['dashboard', 'chrome_reader_mode','account_circle'];
+      $ICON = ['dashboard','account_circle'];
       for ($i = 0; $i < count($ARRAY_PAGINAS); $i++) {
         if ($ARRAY_PAGINAS[$i] == $PAGINA) {
           $menu_ativo = 'active';

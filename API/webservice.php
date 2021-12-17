@@ -1,5 +1,6 @@
 <?php
 include "../_conect.php";
+include "EMAIL/index.php";
 $AUTH = isset($_REQUEST['auth']) ? $_REQUEST['auth'] : "";
 $TOKEN_USER = isset($_REQUEST['TOKEN_USER']) ? $_REQUEST['TOKEN_USER'] : "";
 switch ($AUTH) {
@@ -74,6 +75,18 @@ switch ($AUTH) {
 
     case 17:
         include "17_ADD_ALUNO_SALA.php";
+
+        break;
+    case 18:
+        include "18_PROCURAR_PROF.php";
+
+        break;
+    case 19:
+        include "19_ALUNO_ENTRAR_SALA.php";
+
+        break;
+    case 20:
+        include "20_CONFIRMA_CONVITE_ALUNO.php";
 
         break;
 

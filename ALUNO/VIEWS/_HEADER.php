@@ -4,7 +4,7 @@ $CAPTACAO_PAGINA = isset($_GET['url']) ? urlInjection($_GET['url']) : 'HOME';
 $PAGINA = explode('/', $CAPTACAO_PAGINA);
 $PAGINA_VALIDAR = strtoupper($PAGINA[0]);
 
-$ARRAY_PAGINAS = ['HOME', 'TESTE', 'PREFERENCIAS'];
+$ARRAY_PAGINAS = ['HOME', 'PREFERENCIAS'];
 
 if (in_array($PAGINA_VALIDAR, $ARRAY_PAGINAS)) {
   $PAGINA = $PAGINA_VALIDAR;

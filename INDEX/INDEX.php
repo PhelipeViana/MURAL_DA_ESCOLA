@@ -130,7 +130,7 @@
             <label for="">Nome</label>
             <input type="text" class="form-control" name="nome" required>
             <label for="">Email</label>
-            <input type="email" class="form-control" name="email" required>
+            <input type="email" class="form-control" name="email" required id="input_email">
             <label for="">Telefone</label>
             <input type="text" class="form-control mask-phone" name="telefone" required>
 
@@ -229,8 +229,14 @@
                 corpo += `<p>${erro[i]}<p>`;
               }
               $("#error").html(corpo)
-            } else {
+            } else if (status == 1) {
               Login(response.login, response.senha);
+            } else {
+              alert('Ops! Email inválido');
+              $("#input_email")
+              .focus()
+              .css('color','red')
+
             }
           }
         });

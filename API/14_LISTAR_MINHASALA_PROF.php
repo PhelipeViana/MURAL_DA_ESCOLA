@@ -1,6 +1,12 @@
 <?php
 
-$sql = "SELECT * FROM `salas` WHERE `token_user_sala`='$TOKEN_USER' AND `ativo`=1 order by id_sala desc";
+$sql = "SELECT *,
+(SELECT COUNT(*) FROM `aluno_sala` WHERE `REF_ID_SALA`=SL.id_sala AND status_convite=1) AS MATRICULADOS,
+(SELECT count(*) FROM `projetos_sala` WHERE `REF_SALAPROS`=SL.id_sala) as QUIZ
+FROM salas as SL 
+WHERE 
+SL.token_user_sala='$TOKEN_USER' 
+AND SL.ativo=1 order by id_sala desc";
 $exe = mysqli_query($conn, $sql);
 
 $num = mysqli_num_rows($exe);

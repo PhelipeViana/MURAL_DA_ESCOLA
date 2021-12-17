@@ -112,7 +112,8 @@
         let corpo = `<option value="0">SELECIONE O QUIZ</option>`;
         let indice = response.ret;
         for (let i = 0; i < indice.length; i++) {
-            corpo += `<option value='${indice[i].id_projeto}'>${indice[i].nome_projeto}</option>`
+            corpo += `<option value='${indice[i].id_projeto}'>
+            PROJETO ${indice[i].id_projeto}</option>`
         }
         $("#lista_projetos").html(corpo);
     }

@@ -89,6 +89,26 @@ switch ($AUTH) {
         include "20_CONFIRMA_CONVITE_ALUNO.php";
 
         break;
+    case 21:
+        include "21_QUIZ_POR_SALAS_PROF.php";
+
+        break;
+    case 22:
+        include "22_APLICAR_QUIZ_SALA.php";
+
+        break;
+
+    case 23:
+        include "23_RETIRAR_PROJETO.php";
+
+        break;
+
+
+    case 24:
+        include "24_REATIVAR_PROJETO.php";
+
+        break;
+
 
 
     default:

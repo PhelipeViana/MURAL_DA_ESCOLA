@@ -115,6 +115,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal_add_quiz" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ADICIONAR QUIZ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="corpo_quiz_sala">
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">FECHAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <script>
@@ -131,6 +151,145 @@
         }
 
     })
+
+
+
+
+    function projetosPorSala(sala) {
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('21', sala),
+            })
+            .done(function(response) {
+                montarProjetoSala(response, sala);
+            })
+    }
+
+    function montarProjetoSala(response, sala) {
+        let qtde = response.num;
+        let indice = response.ret;
+        let corpo = "";
+        if (qtde == 0) {
+            corpo += `<a href='<? $SITE ?>/QUIZ'><h3 class='text-center'>DESEJA CRIAR UM QUIZ?</a></h3>`;
+        } else {
+            corpo += `<table class='table table-striped table-bordered'>
+            <thead>
+                <tr>
+                    <th>NOME</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody>`;
+            for (let i = 0; i < indice.length; i++) {
+                let stadd = indice[i].ADICIONADO;
+                let stproj = indice[i].STATUS_PROJETO;
+                let btn_comando = "";
+                if (stadd == 0) {
+                    btn_comando = `<button class='btn btn-primary aplicar_quiz'
+                    data-indice='${i}'
+                    data-projeto='${indice[i].id_projeto}'
+                    data-sala='${sala}'
+                    >APLICAR</button>`
+                } else {
+                    if (stproj == 1) {
+                        btn_comando = `<button class='btn btn-success retirar_quiz'
+                    data-indice='${i}'
+                    data-projeto='${indice[i].id_projeto}'
+                    data-sala='${sala}'
+                    >DISPONIVEL</button>`
+                    } else {
+
+                        btn_comando = `<button class='btn btn-danger ativar_quiz'
+                    data-indice='${i}'
+                    data-projeto='${indice[i].id_projeto}'
+                    data-sala='${sala}'
+                    >INDISPONÍVEL</button>`
+                    }
+
+                }
+                corpo += `<tr>
+                <td>PROJETO ${indice[i].id_projeto}</td>
+                <td id='area_${i}'>${btn_comando}</td>
+                
+                </tr>`;
+            }
+            corpo += `</tbody></table>`;
+
+        }
+        $("#corpo_quiz_sala").html(corpo);
+        $(".aplicar_quiz").click(function(e) {
+            let projeto = $(this).data('projeto');
+            let sala = $(this).data('sala');
+            let indice = $(this).data('indice');
+            let ok = confirm('O quiz ficará disponivel para a SALA REALIZAR-LO\nTem certeza disso?');
+            if (ok) {
+                AplicarProjeto(projeto, sala, indice)
+            }
+        })
+        $(".retirar_quiz").click(function(e) {
+            let projeto = $(this).data('projeto');
+            let sala = $(this).data('sala');
+            let indice = $(this).data('indice');
+            let ok = confirm('O QUIZ FICARÁ INDISPONIVEL TEMPORARIAMENTE\nTEM CERTEZA DESSA AÇÃO?');
+            if (ok) {
+                RetirarProjeto(projeto, sala, indice);
+            }
+        })
+        $(".ativar_quiz").click(function(e) {
+            let projeto = $(this).data('projeto');
+            let sala = $(this).data('sala');
+            let indice = $(this).data('indice');
+            let ok = confirm('O QUIZ VOLTARÁ A FICAR DISPONIVEL\nTEM CERTEZA DISSO?');
+            if (ok) {
+                ReativarProjeto(projeto, sala, indice);
+            }
+        })
+
+
+    }
+
+    function ReativarProjeto(proj, sala, indice) {
+        $("#area_" + indice).html('...')
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('24', proj, sala),
+            })
+            .done(function(response) {
+                projetosPorSala(sala)
+            })
+    }
+
+    function RetirarProjeto(proj, sala, indice) {
+        $("#area_" + indice).html('...')
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('23', proj, sala),
+            })
+            .done(function(response) {
+                projetosPorSala(sala)
+            })
+    }
+
+    function AplicarProjeto(proj, sala, indice) {
+        $("#area_" + indice).html('...')
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('22', proj, sala),
+            })
+            .done(function(response) {
+                projetosPorSala(sala)
+                ListarSala();
+            })
+    }
+
 
     function AdicionarAlunoSala(aluno, sala) {
         $("#btn_add_aluno").html('...');
@@ -222,7 +381,7 @@
             corpo = "";
         }
         $("#alunos_pesquisa").html(corpo)
-        console.log(indice)
+      
         $("#btn_add_aluno").click(function(e) {
             let aluno = $(this).data('aluno');
             let sala = $("#ref_sala").val();
@@ -248,7 +407,7 @@
     }
 
     function montarSalas(response) {
-
+        
         let indice = response.ret;
         let corpo = "";
 
@@ -276,7 +435,7 @@
                     <tbody>
                         <tr>
                             <td><a href="#">ALUNOS</a></td>
-                            <td>0</td>
+                            <td>${indice[i].MATRICULADOS}</td>
                             <td class="td-actions text-right">
                                 <button type="button" rel="tooltip" title="Adicionar" class="btn btn-primary btn-link btn-sm adiciona_aluno" data-sala='${indice[i].id_sala}'>
                                     <i class="material-icons">add_circle_outline</i>
@@ -286,10 +445,11 @@
                         </tr>
                         <tr>
                             <td><a href="#">QUIZ</a></td>
-                            <td>5</td>
+                            <td>${indice[i].QUIZ}</td>
                             <td class="td-actions text-right">
-                                <button type="button" rel="tooltip" title="Adicionar" class="btn btn-primary btn-link btn-sm">
-                                    <i class="material-icons">edit</i>
+                                <button type="button" rel="tooltip" title="Adicionar Quiz" class="btn btn-primary btn-link btn-sm add_quiz"
+                                data-sala='${indice[i].id_sala}'>
+                                    <i class="material-icons">add_circle_outline</i>
                                 </button>
 
                             </td>
@@ -308,6 +468,13 @@
             corpo = `NENHUMA SALA CRIADA!`;
         }
         $("#area_salas").html(corpo);
+
+        $(".add_quiz").click(function(e) {
+            let sala = $(this).data('sala')
+
+            projetosPorSala(sala);
+            $("#modal_add_quiz").modal('show');
+        })
         $(".editar_sala").click(function(e) {
             let sala = $(this).data('sala');
             let escola = $(this).data('escola');
@@ -337,14 +504,14 @@
     }
     $("#form_editar_sala").submit(function(e) {
         e.preventDefault();
-        console.log($(this).serialize());
+       
         EditarSala("form_editar_sala");
     })
 
     //
     $("#form_criar_sala").submit(function(e) {
         e.preventDefault();
-        console.log($(this).serialize());
+      
         CriarSala("form_criar_sala")
     })
 
@@ -381,7 +548,7 @@
             })
             .done(function(response) {
                 let status = response.st;
-                console.log(response)
+              
                 if (status == 1) {
                     alert('Editada sala criada com sucesso!');
                     $("#modal_editar_sala").modal('hide');

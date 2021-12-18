@@ -43,9 +43,16 @@ while ($row = mysqli_fetch_assoc($EXE)) {
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
   <link href="<?= $SITE ?>/ALUNO/demo/demo.css" rel="stylesheet" />
+ 
   <script src="<?= $SITE ?>/ALUNO/js/core/jquery.min.js"></script>
   <script src="<?= $SITE ?>/ALUNO/js/cpf.js"></script>
   <script src="<?= $SITE ?>/ALUNO/js/locais.js"></script>
+  
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
   <script src="<?= $SITE ?>/ALUNO/js/mascara.js"></script>
   <?php include "ALUNO/VIEWS/_CSS.php"; ?>
   <script>
@@ -53,7 +60,7 @@ while ($row = mysqli_fetch_assoc($EXE)) {
       PARS: function(auth, p1 = 0, p2 = 0, p3 = 0, p4 = 0, p5 = 0) {
         let obj = {
           auth: auth,
-          TOKEN_USER: "<?=$TOKEN_USER?>",
+          TOKEN_USER: "<?= $TOKEN_USER ?>",
           p1: p1,
           p2: p2,
           p3: p3,
@@ -63,7 +70,7 @@ while ($row = mysqli_fetch_assoc($EXE)) {
         return obj;
       },
       OBJ: function(auth, obj) {
-        obj['TOKEN_USER'] = "<?=$TOKEN_USER?>";
+        obj['TOKEN_USER'] = "<?= $TOKEN_USER ?>";
         obj['auth'] = auth;
 
 
@@ -75,7 +82,7 @@ while ($row = mysqli_fetch_assoc($EXE)) {
         for (let i = 0; i < classe.length; i++) {
           json[classe[i].getAttribute("name")] = classe[i].value;
         }
-        json['TOKEN_USER'] = "<?=$TOKEN_USER?>";
+        json['TOKEN_USER'] = "<?= $TOKEN_USER ?>";
         json['auth'] = auth;
 
         return json;
@@ -87,7 +94,7 @@ while ($row = mysqli_fetch_assoc($EXE)) {
         for (let i = 0; i < classe.length; i++) {
           obj.push(classe[i].value);
         }
-        json['TOKEN_USER'] = "<?=$TOKEN_USER?>";
+        json['TOKEN_USER'] = "<?= $TOKEN_USER ?>";
         json['auth'] = auth;
         json['JSON'] = obj;
         json['p1'] = p1;
@@ -99,7 +106,7 @@ while ($row = mysqli_fetch_assoc($EXE)) {
       },
       FORM: function(auth, formulario, p1 = 0) {
         let int = $("#" + formulario).serialize();
-        let usuario = "<?=$TOKEN_USER?>";
+        let usuario = "<?= $TOKEN_USER ?>";
         int += "&auth=" + auth + "&TOKEN_USER=" + usuario + "&p1=" + p1;
         return int
       },
@@ -119,7 +126,7 @@ while ($row = mysqli_fetch_assoc($EXE)) {
 
 
         json['auth'] = auth;
-        json['TOKEN_USER'] = "<?=$TOKEN_USER?>";
+        json['TOKEN_USER'] = "<?= $TOKEN_USER ?>";
         json['ARRAY'] = array;
 
 

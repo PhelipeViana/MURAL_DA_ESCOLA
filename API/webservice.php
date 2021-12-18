@@ -108,6 +108,20 @@ switch ($AUTH) {
         include "24_REATIVAR_PROJETO.php";
 
         break;
+    case 25:
+        include "25_LISTA_EMAIL_PROF.php";
+
+        break;
+
+    case 26:
+        include "26_VERIFICAR_CONV_PEND.php";
+
+        break;
+
+    case 27:
+        include "27_ALTERAR_STATUS_CONVITE.php";
+
+        break;
 
 
 

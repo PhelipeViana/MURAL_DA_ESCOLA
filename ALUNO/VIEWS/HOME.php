@@ -1,24 +1,24 @@
+<div id="area_notify"></div>
 <div class="row">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header card-header-tabs card-header-primary">
                 <div class="row">
-                    <div class="col-md-10">
-                        <input type="text" class="form-control" placeholder="Digite email do professor" id="input_buscar_prof">
+                    <div class="col-9">
+                        <div class="ui-widget">
+                            <input type="text" class="form-control" placeholder="Digite email do professor" id="input_buscar_prof">
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn" id="btn_buscar">
-                            <span class="material-icons">
-                                search
-                            </span>
-                        </button>
-                    </div>
+                    <button class="btn" id="btn_buscar">
+                        <span class="material-icons">
+                            search
+                        </span>
+                    </button>
                 </div>
 
-            </div>
-            <div class="card-body" id="area_resultado_professor">
 
             </div>
+            <div class="card-body" id="area_resultado_professor"></div>
         </div>
     </div>
     <div class="col-md-6">
@@ -120,6 +120,79 @@
 </div>
 
 <script>
+    verificandoConvitePendente()
+    setInterval(verificandoConvitePendente, 60000);
+
+
+    function verificandoConvitePendente() {
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('26'),
+            })
+            .done(function(response) {
+                montarNotificadorConvite(response)
+            })
+    }
+
+    function montarNotificadorConvite(response) {
+        let indice = response.ret;
+        let corpo = "";
+        if (indice != null) {
+            for (let i = 0; i < indice.length; i++) {
+                corpo += ` 
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                ${indice[i].nome} está te convidando para participar da sala
+                <strong>${indice[i].nome_sala}</strong>
+                <strong>${indice[i].escola_sala}</strong>
+                <button type="button" class="btn btn-success aceita_convite" data-id='${indice[i].id_alunosala}'>
+                ACEITAR
+                <span class="material-icons">
+                check_circle
+                </span>
+                </button>
+                <button type="button" class="btn btn-danger recusar_convite" 
+                data-id='${indice[i].id_alunosala}'>
+                RECUSAR
+                <span class="material-icons">
+                cancel
+                </span>
+                </button>
+                </div>   
+                `
+            }
+        } else {
+            corpo = "";
+        }
+        $("#area_notify").html(corpo)
+        $(".aceita_convite").click(function(e) {
+            let id = $(this).data('id');
+            alterarStatusConvite(id, 1)
+        })
+        $(".recusar_convite").click(function(e) {
+            let id = $(this).data('id');
+            alterarStatusConvite(id, 0)
+        })
+     
+
+    }
+
+    function alterarStatusConvite(id, status) {
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('27', id, status),
+            })
+            .done(function(response) {
+                console.log(response)
+                verificandoConvitePendente();
+            })
+    }
+
+
+
     $("#btn_buscar").click(function(e) {
         let valor = $("#input_buscar_prof").val();
         let email = isEmail(valor);
@@ -153,6 +226,9 @@
         let qtde = response.num;
         if (qtde > 0) {
             corpo += ` 
+            <button class='btn btn-danger btn-block' id='limpar_pesquisa'>
+            LIMPAR PESQUISA 
+            </button>
             <div class='row'>
             <div class='col-6'><img src='${indice[0].avatar}' class='img-fluid'></div>
             <div class='col-6'>
@@ -164,6 +240,7 @@
             `
             if (salas !== null) {
                 corpo += ` 
+                  
                     <table class='table table-striped table-sm-responsive'>
                     <thead>
                     <tr>
@@ -232,6 +309,14 @@
             }
 
         })
+        $("#limpar_pesquisa").click(function(e) {
+            $("#area_resultado_professor").html('')
+            $("#input_buscar_prof")
+                .val('')
+                .focus()
+
+
+        })
 
     }
 
@@ -263,5 +348,29 @@
     function isEmail(email) {
         const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return res.test(String(email).toLowerCase());
+    }
+    //autocomplete dos professores
+    $.ajax({
+            url: '<?= $ENDPOINT; ?>',
+            type: 'POST',
+            dataType: 'json',
+            data: DADOS.PARS('25'),
+
+        })
+        .done(function(response) {
+            preencher(response);
+
+        })
+
+    function preencher(response) {
+        let data = new Array();
+        let indice = response.ret
+        for (let i = 0; i < indice.length; i++) {
+            data.push(indice[i].login_acesso); //indice do banco
+        }
+        $("#input_buscar_prof").autocomplete({
+            source: data,
+            autoFocus: true
+        });
     }
 </script>

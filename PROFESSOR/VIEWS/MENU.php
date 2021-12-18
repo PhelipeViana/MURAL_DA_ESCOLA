@@ -44,7 +44,7 @@
         <a class="navbar-brand float-right" href="javascript:;" data-toggle="modal" data-target="#edit_informacao">
           <span class="material-icons">
             account_circle
-          </span>USUARIO
+          </span><?=$DADOS[0]['login_acesso']?>
         </a>
       </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">

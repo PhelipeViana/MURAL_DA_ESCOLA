@@ -46,13 +46,13 @@ while ($row = mysqli_fetch_assoc($EXE)) {
   <script src="<?= $SITE ?>/ALUNO/js/core/jquery.min.js"></script>
   <script src="<?= $SITE ?>/ALUNO/js/cpf.js"></script>
   <script src="<?= $SITE ?>/ALUNO/js/locais.js"></script>
-  <script src="<?= $SITE ?>/ALUNO/js/mascara.js"></script>
+
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-
+  <script src="<?= $SITE ?>/ALUNO/js/mascara.js"></script>
   <?php include "ALUNO/VIEWS/_CSS.php"; ?>
 
 

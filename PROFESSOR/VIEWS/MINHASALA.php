@@ -210,7 +210,7 @@
 
                 }
                 corpo += `<tr>
-                <td>PROJETO ${indice[i].id_projeto}</td>
+                <td>${indice[i].nome_projeto}</td>
                 <td id='area_${i}'>${btn_comando}</td>
                 
                 </tr>`;

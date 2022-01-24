@@ -23,9 +23,9 @@
         </ul>
     </nav>
     <div class="card">
-        <div class="card-header card-header-primary text-center">
+        <div class="card-header text-center">
             <label for="" style="color: black !important;">Qual o nome do quiz?</label>
-            <input type="text" class="form-control" id="form_nome_quiz" style="color: black !important;">
+            <input type="text" class="form-control" id="form_nome_quiz" style="color: red !important;">
 
         </div>
         <div class="card-body">
@@ -113,7 +113,7 @@
         let indice = response.ret;
         for (let i = 0; i < indice.length; i++) {
             corpo += `<option value='${indice[i].id_projeto}'>
-            PROJETO ${indice[i].id_projeto}</option>`
+            ${indice[i].nome_projeto}</option>`
         }
         $("#lista_projetos").html(corpo);
     }
@@ -142,6 +142,7 @@
 
     function montarQuiz(response) {
         let indice = response.ret;
+        $("#form_nome_quiz").val('')
 
         for (let i = 0; i < indice.length; i++) {
 
@@ -181,12 +182,12 @@
                 let indice = $(this).data('indice');
                 let valor = $(this).val();
                 AlterarAlternativas(id, valor, indice)
-            }) 
+            })
 
 
         }
-      
 
+        $("#form_nome_quiz").val(indice[0].nome_projeto)
 
         $(".perguntas")
             .change(function(e) {
@@ -200,6 +201,11 @@
             })
 
     }
+    $("#form_nome_quiz").change(function(e) {
+        let nome = $(this).val();
+        let id = $("#lista_projetos  option:selected").val()
+        AlterarNome(id, nome)
+    })
 
     function AlterarNome(id, nome) {
         $.ajax({
@@ -210,6 +216,7 @@
             })
             .done(function(response) {
                 alert('Alterado com sucesso!')
+                ListandoProjetos();
             })
 
     }

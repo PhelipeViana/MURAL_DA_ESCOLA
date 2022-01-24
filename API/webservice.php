@@ -122,6 +122,35 @@ switch ($AUTH) {
         include "27_ALTERAR_STATUS_CONVITE.php";
 
         break;
+    case 28:
+        include "28_STATUS_MEU_QUIZ.php";
+
+        break;
+
+    case 29:
+        include "29_ACEITE_QUIZ_ALUNO.php";
+
+        break;
+
+
+    case 30:
+        include "30_LER_QUIZ_SETADO.php";
+
+        break;
+
+    case 31:
+        include "31_RESPONDER_ALUNO.php";
+
+        break;
+    case 32:
+        include "32_SAIR_QUIZ.php";
+
+        break;
+
+        case 33:
+            include "33_REDEFINIR_SENHA.php";
+    
+            break;
 
 
 

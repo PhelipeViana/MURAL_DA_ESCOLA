@@ -17,7 +17,21 @@
   <script src="INDEX/js/core/jquery.min.js"></script>
   <script src="INDEX/js/locais.js"></script>
   <script src="INDEX/js/mascara.js"></script>
+  <style>
+    @media only screen and (max-width: 273px) {
 
+
+      .rodape {
+        margin-top: 150px;
+        background-color: blueviolet;
+      }
+
+    }
+
+    .logo {
+      width: 160px !important;
+    }
+  </style>
 </head>
 
 <body class="offline-doc">
@@ -31,7 +45,7 @@
 
   <div class="page-header clear-filter">
     <div class="page-header-image" style="background-color:blueviolet;"></div>
-    <div class="content-center">
+    <div class="content-center" style="margin-top: -150px;">
       <div class="col-md-8 ml-auto mr-auto">
         <div class="brand">
           <h1 class="title">
@@ -39,52 +53,52 @@
           </h1>
           <h3 class="description">Seja bem Vindo</h3>
           <br />
-          <a href="#" class="btn btn-primary btn-round btn-lg" data-toggle="modal" data-target="#login">ENTRAR</a>
+          <a href="#" class="btn btn-primary btn-round btn-lg" id='btn_entrar' style="z-index: 1000;">LOGIN</a>
         </div>
       </div>
     </div>
+
   </div>
-  <footer class="footer">
-    <div class="container-fluid">
-      <nav class="float-center">
-        <ul>
+  <div class="rodape">
+    <footer class="footer">
+      <nav>
+        <ul class="grupo">
           <li>
             <a href="#">
-              <img src="INDEX/logo_mural/1.png" alt="" style="width: 105px;">
+              <img src="INDEX/logo_mural/1.png" alt="" class="logo">
             </a>
           </li>
           <li>
             <a href="#">
-              <img src="INDEX/logo_mural/2.png" alt="" style="width: 105px;">
+              <img src="INDEX/logo_mural/2.png" alt="" class="logo">
             </a>
           </li>
           <li>
             <a href="#">
-              <img src="INDEX/logo_mural/3.png" alt="" style="width: 105px;">
+              <img src="INDEX/logo_mural/brasil.jpeg" alt="" class="logo">
             </a>
           </li>
           <li>
             <a href="#">
-              <img src="INDEX/logo_mural/4.png" alt="" style="width: 105px;">
+              <img src="INDEX/logo_mural/4.png" alt="" class="logo">
             </a>
           </li>
           <li>
             <a href="#">
-              <img src="INDEX/logo_mural/5.png" alt="" style="width: 105px;">
+              <img src="INDEX/logo_mural/5.png" alt="" class="logo">
             </a>
           </li>
           <li>
             <a href="#">
-              <img src="INDEX/logo_mural/6.png" alt="" style="width: 105px;">
+              <img src="INDEX/logo_mural/cultura.jpeg" alt="" class="logo">
             </a>
           </li>
 
 
         </ul>
       </nav>
-    </div>
-  </footer>
-
+    </footer>
+  </div>
   <!-- Modal -->
   <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -105,6 +119,10 @@
             <label for="">Senha</label>
             <input type="password" class="form-control" id="input_senha" value="">
             <input type="hidden" name="auth" value="1">
+        </div>
+        <div class="text-center">
+
+          <a href="#" data-toggle="modal" data-target="#modal_senha">Esqueci a senha</a>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary">ENTRAR</button>
@@ -153,7 +171,36 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="modal_senha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Redefinir Senha</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
 
+          <form id="form_senha">
+            <label for="">Email</label>
+            <input type="text" class="form-control nv" id="input_email_esqueci" value="" name="email">
+            <label for="">Telefone Cadastrado</label>
+            <input type="text" class="form-control mask-phone nv" name="telefone" required>
+            <label for="">Nova Senha</label>
+            <input type="password" class="form-control nv" id="input_senha1" value="" name="senha1">
+            <label for="">Digite Novamente</label>
+            <input type="password" class="form-control nv" id="input_senha2" value="" name="senha2">
+            <input type="hidden" name="auth" value="33">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">ENTRAR</button>
+          </form>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">FECHAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <script src="INDEX/js/core/popper.min.js"></script>
@@ -198,6 +245,32 @@
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="INDEX/demo/demo.js"></script>
   <script>
+    $("#form_senha").submit(function(e) {
+      e.preventDefault();
+      $.ajax({
+        url: "<?= $ENDPOINT ?>",
+        data: $(this).serialize(),
+        type: 'POST',
+        dataType: 'json',
+        success: function(response) {
+          let status = response.st;
+          if (status > 0) {
+            alert('Entre com a nova senha!');
+            $(".nv").val('');
+            window.location.assign('index.php');
+          } else {
+            alert(response.msg)
+            $(".nv").css('color', 'red');
+          }
+
+        }
+      });
+    })
+    $("#btn_entrar").click(function(e) {
+      $("#login").modal('show')
+      // $(this).html('clicou')
+
+    })
     $(document).ready(function() {
 
       $(".mask-phone").mask("(99) 99999-9999");
@@ -234,8 +307,8 @@
             } else {
               alert('Ops! Email inválido');
               $("#input_email")
-              .focus()
-              .css('color','red')
+                .focus()
+                .css('color', 'red')
 
             }
           }

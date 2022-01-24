@@ -26,27 +26,23 @@
             <div class="card-header card-header-tabs card-header-primary">
                 <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
-
+                        <h3 class="text-center">AREA DO QUIZ</h3>
                         <!-- INCIO LISTA TAREFAS -->
-                        <ul class="nav nav-tabs" data-tabs="tabs">
+                        <ul class="nav nav-tabs nav-pills" data-tabs="tabs">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#<?= $var ?>tarefas_pendentes" data-toggle="tab">
+                                <a class="nav-link active" href="#quiz_pendente" data-toggle="tab">
                                     <i class="material-icons">pending_actions</i> PENDENTES
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link" href="#<?= $var ?>tarefas_realizadas" data-toggle="tab">
-                                    <i class="material-icons">check_circle</i>FEITOS
-                                    <div class="ripple-container"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#<?= $var ?>tarefas_corrigidas" data-toggle="tab">
+                                <a class="nav-link" href="#quiz_corrigido" data-toggle="tab">
                                     <i class="material-icons">done_all</i> CORRIGIDO
                                     <div class="ripple-container"></div>
                                 </a>
                             </li>
+                        
                         </ul>
                         <!-- FIM LISTA TAREFAS -->
                     </div>
@@ -54,74 +50,165 @@
             </div>
             <div class="card-body">
                 <div class="tab-content">
-                    <!-- CORPO TAREFAS PENDENTES -->
-                    <div class="tab-pane active" id="<?= $var ?>tarefas_pendentes">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        MICROBIOLOGIA TESTE 4
-                                    </td>
-                                    <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="Fazer" class="btn btn-primary btn-link btn-sm">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--FIM  CORPO TAREFAS PENDENTES -->
-                    <div class="tab-pane" id="<?= $var ?>tarefas_realizadas">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>FISIOLOGIA TESTE 7</td>
-                                    <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="Refazer" class="btn btn-primary btn-link btn-sm">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane" id="<?= $var ?>tarefas_corrigidas">
-                        <table class="table">
-                            <tbody>
-
-                                <tr>
-                                    <td>GRAMÁTICA INSTRUMENTAL</td>
-                                    <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="VER CORREÇÃO" class="btn btn-danger btn-link btn-sm">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>MATEMÁTICA INSTRUMENTAL</td>
-                                    <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="VER CORREÇÃO" class="btn btn-danger btn-link btn-sm">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="tab-pane active" id="quiz_pendente"></div>
+                    <div class="tab-pane" id="quiz_corrigido"></div>
+                   
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modal_alert_quiz" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title nome_quiz"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><?= $_NOMESOBRENOME ?>, tudo bem?!</p>
+                <span>Ao iniciar o quiz <strong class='nome_quiz'></strong></span>
+                <p>Você deverá estar ciente que:</p>
+                <hr>
+                <h3>É NECESSÁRIO FINALIZA-LO</h3>
+                <p class="pull-right"><strong>DESEJA PROSEGUIR?</strong></p>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary" id='sim_quiz'>SIM</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">NÃO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <script>
-    verificandoConvitePendente()
-    setInterval(verificandoConvitePendente, 60000);
+    vericandoQuizaluno();
+
+    function vericandoQuizaluno() {
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('28'),
+            })
+            .done(function(response) {
+                montarCorpoStatusquiz(response)
+            })
+    }
+
+    function montarCorpoStatusquiz(response) {
+        let indice = response.ret;
+        let corpo_pendente = "";
+        let corpo_corrigido="";
+    
+        if (indice != null) {
+            for (let i = 0; i < indice.length; i++) {
+                if (indice[i].STATUS_FEITO == 0) {
+                    corpo_pendente += ` 
+                <table class="table table-striped">
+                <tbody>
+                <tr style='cursor:pointer' class='fazer_quiz' 
+                data-id='${indice[i].id_projeto}'
+                data-nome='${indice[i].nome_projeto}'
+                
+                
+                >
+                <td>
+                ${indice[i].nome_projeto}
+                </td>
+                <td class="td-actions text-right">
+                <button type="button" rel="tooltip" title="FAZER ${indice[i].nome_projeto}" class="btn btn-primary btn-link btn-sm">
+                <i class="material-icons">edit</i>
+                </button>
+                </td>
+
+                </tr>
+                </tbody>
+                </table>
+                `
+                }else{
+                    corpo_corrigido += ` 
+                <table class="table table-striped">
+                <tbody>
+                <tr style='cursor:pointer' class='' 
+                data-id='${indice[i].id_projeto}'
+                data-nome='${indice[i].nome_projeto}'
+                
+                
+                >
+                <td>
+                ${indice[i].nome_projeto}
+                </td>
+                <td class="text-right">
+                ${indice[i].NOTA}
+                </td>
+
+                </tr>
+                </tbody>
+                </table>
+                `  
+                }
+
+            }
+        } else {
+            corpo_pendente = "<h1>NÃO HÁ PENDENCIAS</h1>";
+        }
+
+        $("#quiz_pendente").html(corpo_pendente)
+        $("#quiz_corrigido").html(corpo_corrigido)
+        
+        
+
+        $(".fazer_quiz").click(function(e) {
+            let id = $(this).data('id');
+            let nome = $(this).data('nome');
+
+            $(".nome_quiz").html(nome);
+            $("#sim_quiz").data('id', id);
+            $("#modal_alert_quiz").modal('show')
+
+        })
+
+    }
+    $("#sim_quiz").click(function(e) {
+        let id = $(this).data('id');
+        FazerQuiz(id);
+
+    })
+
+    function FazerQuiz(id) {
+        $.ajax({
+                url: '<?= $ENDPOINT; ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: DADOS.PARS('29', id),
+            })
+            .done(function(response) {
+                let status = response.st;
+                if (status == 0) {
+                    alert(response.msg);
+                } else {
+                    alert('Boa sorte!')
+                    window.location.assign('index.php');
+
+                }
+               
+            })
+    }
+
+
+
+    verificandoConvitePendente();
+    setInterval(verificandoConvitePendente, 120000);
 
 
     function verificandoConvitePendente() {
@@ -174,7 +261,7 @@
             let id = $(this).data('id');
             alterarStatusConvite(id, 0)
         })
-     
+
 
     }
 
@@ -186,7 +273,8 @@
                 data: DADOS.PARS('27', id, status),
             })
             .done(function(response) {
-                console.log(response)
+               
+                
                 verificandoConvitePendente();
             })
     }

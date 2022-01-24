@@ -27,6 +27,12 @@ while ($row = mysqli_fetch_assoc($EXE)) {
 
   $DADOS[] = $row;
 }
+//variaveis globais
+$_NOME = $DADOS[0]['nome'];
+$exp = explode(" ", $_NOME);
+$_PNOME = $exp[0];
+$_NOMESOBRENOME = $_PNOME . " " . end($exp);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -43,11 +49,11 @@ while ($row = mysqli_fetch_assoc($EXE)) {
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
   <link href="<?= $SITE ?>/ALUNO/demo/demo.css" rel="stylesheet" />
- 
+
   <script src="<?= $SITE ?>/ALUNO/js/core/jquery.min.js"></script>
   <script src="<?= $SITE ?>/ALUNO/js/cpf.js"></script>
   <script src="<?= $SITE ?>/ALUNO/js/locais.js"></script>
-  
+
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">

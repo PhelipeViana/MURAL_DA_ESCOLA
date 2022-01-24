@@ -31,27 +31,16 @@
                 <table class="table table-hover table-bordered">
                     <tbody>
 
-                        <!-- <tr>
-                            <td>
-                                <label for='pref_mostrar_not_prof' class='click_privacidade'>
-                                    ANÚNCIO DOS INSTRUTORES EM QUE ESTOU INSCRITO
-                                </label>
-                            </td>
-                            <td>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" value="" checked id='pref_mostrar_not_prof'>
-                                        <span class="form-check-sign">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </td>
-                        </tr> -->
                         <tr>
                             <td>COR DO MEU PERFIL</td>
                             <td>
-                                <input type="color"  class='form-control' value="<?= $DADOS[0]['cor_sistema'] ?>" id="escolhar_cor_sistema">
+                                <input type="color" class='form-control' value="<?= $DADOS[0]['cor_sistema'] ?>" id="escolhar_cor_sistema">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>REDEFINIR SENHA</td>
+                            <td>
+                                <button data-toggle="modal" data-target="#modal_senha" class='btn btn-danger btn-block'>NOVA SENHA</button>
                             </td>
                         </tr>
                     </tbody>
@@ -64,7 +53,60 @@
         </script>
     </div>
 </div>
+<div class="modal fade" id="modal_senha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Redefinir Senha</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="form_senha">
+                    <label for="">Email</label>
+                    <input type="text" class="form-control nv" id="input_email_esqueci" value="" name="email">
+                    <label for="">Telefone Cadastrado</label>
+                    <input type="text" class="form-control mask-phone nv" name="telefone" required>
+                    <label for="">Nova Senha</label>
+                    <input type="password" class="form-control nv" id="input_senha1" value="" name="senha1" required>
+                    <label for="">Digite Novamente</label>
+                    <input type="password" class="form-control nv" id="input_senha2" value="" name="senha2" required>
+                    <input type="hidden" name="auth" value="33">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">REDEFINIR</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">FECHAR</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    $("#form_senha").submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "<?= $ENDPOINT ?>",
+            data: $(this).serialize(),
+            type: 'POST',
+            dataType: 'json',
+            success: function(response) {
+                let status = response.st;
+                if (status > 0) {
+                    alert('Entre com a nova senha!');
+                    $(".nv").val('');
+                    window.location.assign('_deslogar.php');
+                } else {
+                    alert(response.msg)
+                    $(".nv").css('color', 'red');
+                }
+
+            }
+        });
+    })
+
+
     $("#escolhar_cor_sistema").change(function(e) {
         let cor = $(this).val();
         mudarCor(cor);

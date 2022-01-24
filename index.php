@@ -1,6 +1,4 @@
 <?php
-
-
 include "_conect.php";
 
 if (isset($_POST['acesso'])) {
